@@ -39,6 +39,8 @@ body {
   background-color: #00FF00;
   border-radius: 5px;
   position: relative;
+  cursor: pointer;
+  transition: transform 1s ease-out; /* Animation for pipes */
 }
 
 #score-board {
