@@ -1,5 +1,5 @@
 // game.js
-const members = ['bts-member1.png', 'bts-member2.png', 'bts-member3.png', 'bts-member4.png']; // Add more member images here.
+const members = ['bts-member1.png', 'bts-member2.png', 'bts-member3.png', 'bts-member4.png']; // Replace with actual images
 let score = 0;
 let lives = 3;
 let currentMemberIndex;
@@ -19,8 +19,8 @@ function showMember() {
   memberToHit.style.backgroundImage = `url(${members[currentMemberIndex]})`;
 }
 
-// Handle tapping on pipes
-pipes.forEach(pipe => {
+// Pipe click event logic
+pipes.forEach((pipe, index) => {
   pipe.addEventListener('click', function() {
     if (pipe.dataset.memberIndex == currentMemberIndex) {
       score++;
@@ -28,6 +28,7 @@ pipes.forEach(pipe => {
       updateScore();
     } else {
       lives--;
+      updateScore();
       if (lives <= 0) {
         endGame();
       }
@@ -55,12 +56,38 @@ restartButton.addEventListener('click', function() {
   bgMusic.play();
   updateScore();
   showMember();
+  resetPipes();
 });
 
 // Start the game
 function startGame() {
   bgMusic.play();
   showMember();
+  animatePipes(); // Start pipe animations
+}
+
+// Animate pipes by showing members in random pipes
+function animatePipes() {
+  pipes.forEach((pipe, index) => {
+    // Add member index to each pipe
+    pipe.dataset.memberIndex = getRandomMember();
+    // Initially hide the members in the pipes
+    pipe.style.backgroundImage = '';
+    pipe.style.backgroundSize = 'cover';
+    
+    // Show member after a random interval
+    setTimeout(() => {
+      pipe.style.backgroundImage = `url(${members[pipe.dataset.memberIndex]})`;
+      pipe.style.transition = 'background-image 0.5s ease-in-out';
+    }, Math.random() * 2000 + 1000);  // Random delay between 1-3 seconds
+  });
+}
+
+// Reset pipes when restarting the game
+function resetPipes() {
+  pipes.forEach(pipe => {
+    pipe.style.backgroundImage = '';
+  });
 }
 
 startGame();
