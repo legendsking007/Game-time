@@ -1,5 +1,5 @@
 // game.js
-const members = ['bts-member1.png', 'bts-member2.png', 'bts-member3.png', 'bts-member4.png']; // Replace with your actual member images
+const members = ['bts-member1.png', 'bts-member2.png', 'bts-member3.png', 'bts-member4.png']; // Replace with actual member images
 let score = 0;
 let lives = 3;
 let currentMemberIndex;
@@ -14,16 +14,16 @@ let pipes = document.querySelectorAll('.pipe');
 // Random member selection
 const getRandomMember = () => Math.floor(Math.random() * members.length);
 
-// Show member to hit
+// Show member to hit (appears at the top of the screen)
 function showMember() {
   currentMemberIndex = getRandomMember();
   memberToHit.style.backgroundImage = `url(${members[currentMemberIndex]})`;
 
-  // Show the member to hit for 2 seconds
+  // Show the member to hit for 3 seconds
   setTimeout(() => {
-    memberToHit.style.backgroundImage = ''; // Hide member after 2 seconds
-    animatePipes();  // Start showing members in pipes
-  }, 2000);
+    memberToHit.style.backgroundImage = ''; // Hide member after 3 seconds
+    animatePipes();  // Start showing members in pipes after 3 seconds
+  }, 3000);
 }
 
 // Pipe click event logic
@@ -74,31 +74,33 @@ function startGame() {
 
 // Animate pipes with members randomly appearing from the pipes
 function animatePipes() {
+  // Create a random order for the pipes and set members in them
+  const randomOrder = [0, 1, 2, 3].sort(() => Math.random() - 0.5); // Random order for pipes
+  
   pipes.forEach((pipe, index) => {
-    // Assign random member index to each pipe
-    const randomIndex = getRandomMember();
+    const randomIndex = randomOrder[index]; // Assign random order for pipes
     pipe.dataset.memberIndex = randomIndex;
 
     // Initially hide the member in the pipe
     pipe.style.backgroundImage = '';
     pipe.style.transition = 'transform 1s ease-out'; // Transition effect for the "pop-up" effect
-    pipe.style.transform = 'translateY(100px)'; // Move pipe down
+    pipe.style.transform = 'translateY(100px)'; // Move pipe down initially
 
     // After a delay, show the member coming out of the pipe
     setTimeout(() => {
       pipe.style.transform = 'translateY(0)';
       pipe.style.backgroundImage = `url(${members[randomIndex]})`;
       pipe.style.backgroundSize = 'cover';
-    }, Math.random() * 2000 + 1000);  // Delay random between 1s to 3s
+    }, Math.random() * 1500 + 1500);  // Delay random between 1.5s to 3s
 
-    // Hide member and pipe after 4 seconds
+    // Hide member and pipe after 3.5 seconds
     setTimeout(() => {
       pipe.style.transform = 'translateY(100px)';
       pipe.style.backgroundImage = ''; // Clear member from pipe
-    }, 4000);
+    }, 3500);
   });
 
-  // Show the member for a short time to tap before the pipes open
+  // Show the member for 3 seconds before pipes animate
   showMember();
 }
 
